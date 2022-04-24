@@ -10,7 +10,7 @@
     <h1>All Blog Posts</h1>
     <ul>
         <% for (let post of posts) {%>
-            <li><%= post.title %></li>
+            <li><a href="/<%= post.user._id %>/posts/<%= post._id %>"><%= post.title %></a></li>
         <%}%>  
     </ul>
 </body>

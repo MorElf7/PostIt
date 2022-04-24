@@ -18,10 +18,12 @@
         <h2>Posts</h2>
         <ul>
             <% for( let post of user.posts) { %>
-                <li><%= post.title %> </li>
+                <li><a href="<%= user._id %>/posts/<%= post._id %> "><%= post.title %></a> </li>
             <% } %>
         </ul>
     </div>
+    <a href="/"><button>Home</button></a>
+    <a href="/<%= user._id %>/posts/new"><button>New Post</button></a>
 
 
 </body>

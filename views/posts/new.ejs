@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Post</title>
+</head>
+<body>
+    <form action="/<%= userId %>/posts" method="POST">
+        <div>
+            <label for="title">Title</label>
+            <input type="text" id="title" name="post[title]">
+        </div>
+        <div>
+            <label for="description">Description</label>
+            <textarea name="post[description]" id="description" cols="30" rows="10"></textarea>
+        </div>
+        <button>Post</button>
+    </form>
+</body>
+</html>

@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= user.username %> </title>
-</head>
-<body>
+<% layout('layouts/boilerplate') %> 
+<div class="container">
     <h1> <%= user.username %> </h1>
     <div>
         <h2>Bio</h2>
@@ -16,15 +9,19 @@
     </div>
     <div>
         <h2>Posts</h2>
-        <ul>
-            <% for( let post of user.posts) { %>
-                <li><a href="<%= user._id %>/posts/<%= post._id %> "><%= post.title %></a> </li>
-            <% } %>
-        </ul>
+        <% if (user.posts.length) { %>
+            <ul>
+                <% for( let post of user.posts) { %>
+                    <li><a href="<%= user._id %>/posts/<%= post._id %> "><%= post.title %></a> </li>
+                <% } %>
+            </ul>
+        <% } else {%>
+            <p>No post so far</p>
+        <% } %>
     </div>
-    <a href="/"><button>Home</button></a>
-    <a href="/<%= user._id %>/posts/new"><button>New Post</button></a>
-
-
-</body>
-</html>
+    <div>
+        <a href="/"><button type="button" class="btn btn-primary">Home</button></a>
+        <a href="<%= user._id %>/posts/new"><button type="button" class="btn btn-primary">New Post</button></a>
+        <a href="/users"><button type="button" class="btn btn-secondary">Back</button></a>
+    </div>    
+</div>

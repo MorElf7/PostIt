@@ -1,17 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Post</title>
-</head>
-<body>
-    <h1>All Blog Posts</h1>
-    <ul>
-        <% for (let post of posts) {%>
-            <li><a href="/<%= post.user._id %>/posts/<%= post._id %>"><%= post.title %></a></li>
-        <%}%>  
-    </ul>
-</body>
-</html>
+<% layout('layouts/boilerplate') %> 
+<div class="container-md">
+    <div class="d-flex justify-content-center">
+                <h1>All Blog Posts</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+
+        <div class="col-md-6">
+            <ul class="">
+                <% for (let post of posts) {%>
+                    <div class="card border-info ">
+                        <a class="btn btn-light" href="/<%= post.user %>/posts/<%= post._id %>">
+                            <div class="row">
+                                <div class="card-body">
+                                    <div class="card-title"><%= post.title %></div>
+                                    <div class="card-text"><%= post.description %></div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <br>
+                <%}%>  
+            </ul>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-2">
+            Bookmark & Favorites
+        </div>
+    </div>
+</div>

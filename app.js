@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
+const ejsMate = require('ejs-mate');
 
 const Post = require('./models/post');
 const User = require('./models/user');
@@ -18,6 +19,7 @@ db.once("open", () => {
 
 const app = express();
 
+app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -25,32 +27,25 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 
 app.get('/', wrapAsync((req, res) => {
-    res.render('home');
+    res.render('home', {pageTitle: "Home"});
 }))
 
 //List all posts
 app.get('/posts', wrapAsync(async (req, res) => {
     const posts = await Post.find({});
-    res.render('posts/index', {posts});
+    res.render('posts/index', {posts, pageTitle: "All Posts"});
 }))
 
 //List all users
 app.get('/users', wrapAsync(async (req, res) => {
     const users = await User.find({});
-    res.render('users/index', {users});
-}))
-
-//Show Post
-app.get('/:userId/posts/:postId', wrapAsync(async (req, res) => {
-    const {userId, postId} = req.params;
-    const post = await Post.findById(postId).populate('user');
-    res.render('posts/details', {post, userId});
+    res.render('users/index', {users, pageTitle: "All Users"});
 }))
 
 //Create Post
 app.get('/:userId/posts/new', (req, res) => {
     const {userId} = req.params;
-    res.render('posts/new', {userId});
+    res.render('posts/new', {userId, pageTitle: "New Post"});
 })
 
 app.post('/:userId/posts', wrapAsync(async (req, res) => {
@@ -68,7 +63,8 @@ app.post('/:userId/posts', wrapAsync(async (req, res) => {
 app.get('/:userId/posts/:postId/edit', wrapAsync(async (req, res) => {
     const {userId, postId} = req.params;
     const post = await Post.findById(postId);
-    res.render('posts/edit', {post, userId});
+    const pageTitle = `Editing ${post.title}`;
+    res.render('posts/edit', {post, userId, pageTitle});
 }))
 
 app.put('/:userId/posts/:postId', wrapAsync(async (req, res) => {
@@ -87,11 +83,20 @@ app.delete('/:userId/posts/:postId', wrapAsync(async (req, res) => {
     res.redirect(`/${userId}`);
 }))
 
+//Show Post
+app.get('/:userId/posts/:postId', wrapAsync(async (req, res) => {
+    const {userId, postId} = req.params;
+    const post = await Post.findById(postId).populate('user');
+    const pageTitle = post.title;
+    res.render('posts/details', {post, userId, pageTitle});
+}))
+
 //Show User
 app.get('/:userId', wrapAsync(async (req, res) => {
     const {userId} = req.params;
     const user = await User.findById(userId).populate('posts');
-    res.render('users/home', {user});
+    const pageTitle = user.username;
+    res.render('users/home', {user, pageTitle});
 }))
 
 app.all('*', (req, res, next) => {
@@ -100,8 +105,8 @@ app.all('*', (req, res, next) => {
 
 app.use((err, req, res, next) => {
     const {message = "Something went wrong", statusCode = 500} = err;
-    res.status(statusCode)
-    res.send(message)
+    res.status(statusCode);
+    res.send(message);
 })
 
 app.listen(3000, () => {

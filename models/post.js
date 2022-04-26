@@ -2,21 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
-    title: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
-        required: true
-    },
-    image: {
-        type: String
-    },
+    title: String,
+    description: String,
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+        ref: 'User'
     }
 }, {timestamps: true});
 

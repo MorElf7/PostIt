@@ -1,5 +1,6 @@
-const Joi = require("joi").extend(require('@joi/date'));
 const ExpressError = require("./utils/ExpressError");
+const Post = require('./models/post');
+const {postSchema, userSchema} = require('./schemas');
 
 module.exports.isSignIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -10,15 +11,18 @@ module.exports.isSignIn = (req, res, next) => {
     next()
 }
 
+module.exports.isAuthor = async (req, res, next) => {
+    const {userId, postId} = req.params;
+    const post = await Post.findById(postId);
+    if (!post.user.equals(req.user._id)) {
+        req.flash('error', 'You do not have permission')
+        return res.redirect(`/${userId}/posts/${postId}`);
+    }
+    next();
+}
+
 module.exports.validatePost = (req, res, next) => {
-    const postSchema = Joi.object({
-        post: Joi.object({
-            title: Joi.string().required(),
-            description: Joi.string().required(),
-            image: Joi.string(),
-        }).required()
-    })
-    const { error } = postSchema.validate(req.body);
+    const { error } = postSchema.validate(req.body.post);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)
@@ -28,17 +32,7 @@ module.exports.validatePost = (req, res, next) => {
 }
 
 module.exports.validateUser = (req, res, next) => {
-    const userSchema = Joi.object({
-        user: Joi.object({
-            email: Joi.string().required(),
-            bio: Joi.string(),
-            posts: Joi.array({
-                
-            }),
-            joinedAt: Joi.date()
-        }).required()
-    })
-    const { error } = postSchema.validate(req.body);
+    const { error } = userSchema.validate(req.body.user);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)

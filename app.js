@@ -1,3 +1,7 @@
+if (!process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
+
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -7,14 +11,17 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const localStrategy = require('passport-local');
-const Joi = require('joi');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const MongoDBStore = require("connect-mongo");
 
+const allowedContent = require('./allowedContent');
 const User = require('./models/user');
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
 const ExpressError = require('./utils/ExpressError')
-const wrapAsync = require('./utils/wrapAsync');
 
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/PostIt';
 mongoose.connect('mongodb://127.0.0.1:27017/PostIt');
 
 const db = mongoose.connection;
@@ -25,6 +32,11 @@ db.once("open", () => {
 
 const app = express();
 
+const port = process.env.PORT || 3000
+app.listen(port, () => {
+    console.log("Serving on port 3000");
+})
+
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -32,12 +44,47 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'static')));
+app.use(mongoSanitize())
+
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: [],
+            connectSrc: ["'self'", ...allowedContent.connectSrcUrls],
+            scriptSrc: ["'unsafe-inline'", "'self'", ...allowedContent.scriptSrcUrls],
+            styleSrc: ["'self'", "'unsafe-inline'", ...allowedContent.styleSrcUrls],
+            workerSrc: ["'self'", "blob:"],
+            objectSrc: [],
+            imgSrc: [
+                "'self'",
+                "blob:",
+                "data:",
+                "https://res.cloudinary.com/damrqx5dg/", 
+                "https://images.unsplash.com/",
+            ],
+            fontSrc: ["'self'", ...allowedContent.fontSrcUrls],
+        },
+    })
+);
+
+const store = MongoDBStore.create({
+    mongoUrl: dbUrl,
+    secret: 'developmentsecret',
+    touchAfter: 2 * 60 * 60
+})
+
+store.on('error', function(e) {
+    console.log("Session store error", e);
+})
 
 const sessionConfig = {
+    store,
+    name: 'session',
     secret: 'developmentsecret',
     resave: false,
     saveUninitialized: true,
     cookie: {
+        httpOnly: true,
         expires: Date.now() + 1000 * 60 * 60 * 24,
         maxAge: 1000 * 60 * 60 * 24
     }  
@@ -59,9 +106,10 @@ app.use((req, res, next) => {
     next();
 })
 
-app.get('/', wrapAsync((req, res) => {
-    res.render('home', {pageTitle: "Home"});
-}))
+
+app.get('/', (req, res) => {
+    res.render('home', {pageTitle: 'Home'});
+})
 
 app.use('/', postRouter);
 app.use('/', userRouter);
@@ -73,9 +121,6 @@ app.all('*', (req, res, next) => {
 app.use((err, req, res, next) => {
     const {statusCode = 500} = err;
     if (!err.message) err.message = "Something went wrong!";
-    res.status(statusCode).render('error', {err , pageTitle: 'Error'});
-})
-
-app.listen(3000, () => {
-    console.log("Serving on port 3000");
+    res.status(statusCode)
+    res.render('error', {err , pageTitle: 'Error'});
 })

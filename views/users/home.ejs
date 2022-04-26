@@ -11,13 +11,11 @@
             <% } %>
         </div>
         <div class="card-link mb-3 mx-5"> 
-            <form action="/<%= user._id %>?_method=PUT" method="POST">
-                <% if (currentUser && user._id === currentUser._id) { %>
-                    <button class="btn btn-info">Account Settings</button>
-                    <a href="/<%= user._id %>/posts/new"><button type="button" class="btn btn-primary">New Post</button></a>
-                <% } %>
-                <a href="/users"><button type="button" class="btn btn-secondary">Back</button></a>
-            </form>
+            <% if (currentUser && user._id.equals(currentUser._id)) { %>
+                <a href="/<%= user._id %>/edit"><button class="btn btn-info">Account Settings</button></a>
+                <a href="/<%= user._id %>/posts/new"><button type="button" class="btn btn-primary">New Post</button></a>
+            <% } %>
+            <a href="/users"><button type="button" class="btn btn-secondary">Back</button></a>
             
         </div>
         <div class="mb-3 mx-5">

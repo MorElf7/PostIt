@@ -1,31 +1,22 @@
 <% layout('layouts/boilerplate') %> 
-<div class="container-md">
-    <div class="d-flex justify-content-center">
+<div class="">
+    <div class="d-flex justify-content-center offset-1 mb-3">
                 <h1>All Blog Posts</h1>
     </div>
-    <div class="row">
-        <div class="col-md-2"></div>
-
-        <div class="col-md-6">
-            <ul class="">
-                <% for (let post of posts) {%>
-                    <div class="card border-info ">
+    <div class="">
+        <ul class="">
+            <% for (let post of posts) {%>
+                <div class="row">
+                    <div class="card border-info mb-2 w-100">
                         <a class="btn btn-light" href="/<%= post.user %>/posts/<%= post._id %>">
-                            <div class="row">
-                                <div class="card-body">
-                                    <div class="card-title"><%= post.title %></div>
-                                    <div class="card-text"><%= post.description %></div>
-                                </div>
+                            <div class="card-body">
+                                <h4 class="card-title"><%= post.title %></h4>
+                                <div class="card-text"><%= post.description %></div>
                             </div>
                         </a>
                     </div>
-                    <br>
-                <%}%>  
-            </ul>
-        </div>
-        <div class="col-md-1"></div>
-        <div class="col-md-2">
-            Bookmark & Favorites
-        </div>
+                </div>
+            <%}%>  
+        </ul>
     </div>
 </div>

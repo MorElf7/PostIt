@@ -1,27 +1,38 @@
 <% layout('layouts/boilerplate') %> 
-<div class="container">
-    <h1> <%= user.username %> </h1>
-    <div>
-        <h2>Bio</h2>
-        <% if (user.bio) { %>
-            <p> <%= user.bio %> </p>
-        <% } %>
-    </div>
-    <div>
-        <h2>Posts</h2>
-        <% if (user.posts.length) { %>
-            <ul>
-                <% for( let post of user.posts) { %>
-                    <li><a href="<%= user._id %>/posts/<%= post._id %> "><%= post.title %></a> </li>
+<div class="">
+    <div class="card bg-light text-dark mb-3">
+        <div class="card-title mt-3 mb-3 mx-5">
+            <h3> <%= user.username %> </h3>
+        </div>
+        <div class="card-subtitle mb-3 mx-5">
+            <h5>Bio</h5>
+            <% if (user.bio) { %>
+                <div> <%= user.bio %> </div>
+            <% } %>
+        </div>
+        <div class="card-link mb-3 mx-5"> 
+            <form action="/<%= user._id %>?_method=PUT" method="POST">
+                <% if (currentUser && user._id === currentUser._id) { %>
+                    <button class="btn btn-info">Account Settings</button>
+                    <a href="/<%= user._id %>/posts/new"><button type="button" class="btn btn-primary">New Post</button></a>
+                <% } %>
+                <a href="/users"><button type="button" class="btn btn-secondary">Back</button></a>
+            </form>
+            
+        </div>
+        <div class="mb-3 mx-5">
+            <h5>Posts</h5>
+            <ul class="list-group">
+                <% if (user.posts.length) { %>
+                    <% for( let post of user.posts) { %>
+                        <div>
+                            <a href="/<%= user._id %>/posts/<%= post._id %>" class="list-group-item list-group-item-action mb-2"><%= post.title %></a>
+                        </div>
+                    <% } %>
+                <% } else {%>
+                    <div class="mb-2">No post so far</div>
                 <% } %>
             </ul>
-        <% } else {%>
-            <p>No post so far</p>
-        <% } %>
+        </div>
     </div>
-    <div>
-        <a href="/"><button type="button" class="btn btn-primary">Home</button></a>
-        <a href="<%= user._id %>/posts/new"><button type="button" class="btn btn-primary">New Post</button></a>
-        <a href="/users"><button type="button" class="btn btn-secondary">Back</button></a>
-    </div>    
 </div>

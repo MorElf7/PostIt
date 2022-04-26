@@ -1,9 +1,23 @@
 <% layout('layouts/boilerplate') %> 
-<div class="container">
-    <h1>All Users</h1>
-    <ul>
-        <% for (let user of users) {%>
-            <li><a href="<%= user.id %>"><%= user.username %></a></li>
-        <%}%>  
-    </ul>    
+<div class="">
+    <div class="d-flex justify-content-center mb-3 offset-1">
+        <h1>All Users</h1>
+    </div>
+    <div class="">
+        <ul>
+            <% for (let user of users) {%>
+                <div class="row">
+                    <div class="card border-info mb-2 w-100">
+                        <a class="btn btn-light" href="/<%= user.id %>">
+                            <div class="card-body">
+                                <h4 class="card-title"><%= user.username %></h4>
+                                <div class="card-text"><%= user.bio %></div>
+                            </div>
+                        </a>    
+                    </div>
+                </div>
+            <%}%>  
+        </ul>
+    </div>
+        
 </div>

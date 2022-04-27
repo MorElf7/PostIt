@@ -19,6 +19,7 @@ const allowedContent = require('./allowedContent');
 const User = require('./models/user');
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
+const communityRouter = require('./routes/community');
 const ExpressError = require('./utils/ExpressError')
 
 // const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/PostIt';
@@ -112,7 +113,8 @@ app.get('/', (req, res) => {
     res.render('home', {pageTitle: 'Home'});
 })
 
-app.use('/', postRouter);
+app.use('/:userId/posts', postRouter);
+app.use('/communities', communityRouter)
 app.use('/', userRouter);
 
 app.all('*', (req, res, next) => {

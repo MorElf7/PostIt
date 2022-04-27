@@ -7,8 +7,16 @@ const communitySchema = new Schema({
     logo: {
             url: String,
             filename: String
-        }
-    ,
+    },
+    open: Boolean,
+    admin:{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    moderators:[{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     members: [{
         type: Schema.Types.ObjectId,
         ref: 'User'

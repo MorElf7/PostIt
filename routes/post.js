@@ -1,44 +1,40 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({mergeParams: true});
 
 const Post = require('../controllers/post')
 const wrapAsync = require('../utils/wrapAsync');
 const middlewares = require('../middlewares');
 
-//List all posts
-router.get('/posts', 
-    wrapAsync(Post.index))
-
 //Create Post
-router.get('/:userId/posts/new', 
+router.get('/new', 
     middlewares.isSignIn, 
     Post.new)
 
-router.post('/:userId/posts', 
+router.post('', 
     middlewares.isSignIn, 
     middlewares.validatePost, 
     wrapAsync(Post.create))
 
 //Edit Post
-router.get('/:userId/posts/:postId/edit', 
+router.get('/:postId/edit', 
     middlewares.isSignIn, 
     middlewares.isAuthor, 
     wrapAsync(Post.edit))
 
-router.put('/:userId/posts/:postId', 
+router.put('/:postId', 
     middlewares.isSignIn, 
     middlewares.isAuthor, 
     middlewares.validatePost, 
     wrapAsync(Post.update))
 
 //Delete Post
-router.delete('/:userId/posts/:postId', 
+router.delete('/:postId', 
     middlewares.isSignIn, 
     middlewares.isAuthor, 
     wrapAsync(Post.delete))
 
 //Show Post
-router.get('/:userId/posts/:postId', 
+router.get('/:postId', 
     wrapAsync(Post.read))
 
 module.exports = router;

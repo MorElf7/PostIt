@@ -37,7 +37,7 @@ router.get('/:userId',
     wrapAsync(User.show))
 
 //Edit User
-router.get('/:userId/edit', 
+router.get('/:userId/settings', 
     middlewares.isSignIn,  
     middlewares.isUser,
     wrapAsync(User.edit));
@@ -45,7 +45,7 @@ router.get('/:userId/edit',
 router.put('/:userId', 
     middlewares.isSignIn, 
     middlewares.isUser,
-    upload.single('avatar'),
+    upload.single('user[avatar]'),
     middlewares.validateUser,
     wrapAsync(User.update))
 

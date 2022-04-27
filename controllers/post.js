@@ -8,8 +8,7 @@ module.exports.index = async (req, res) => {
 }
 
 module.exports.new = (req, res) => {
-    const {userId} = req.params;
-    res.render('posts/new', {userId, pageTitle: "New Post"});
+    res.render('posts/new', {pageTitle: "New Post"});
 }
 
 module.exports.create = async (req, res) => {
@@ -32,20 +31,17 @@ module.exports.edit = async (req, res) => {
         return res.redirect(`/${userId}`)
     }
     const pageTitle = `Editing ${post.title}`;
-    res.render('posts/edit', {post, userId, pageTitle});
+    res.render('posts/edit', {post, pageTitle});
 }
 
 module.exports.update = async (req, res) => {
     const {userId, postId} = req.params;
     const post = await Post.findById(postId);
-    if (!post.user.equals(req.user._id)) {
-        req.flash('error', 'You do not have permission');
-        return res.redirect(`/${userId}/posts/${postId}`);
+    if (!post) {
+        req.flash('error', 'The post do not exist')
+        return res.redirect(`/${userId}`)
     }
-    post.title = req.body.post.title;
-    post.description = req.body.post.description;
-    // await Post.findByIdAndUpdate(postId, {...req.params.post});
-    await post.save();
+    await post.updateOne(req.body.post);
     req.flash('success', 'Successfully edit a post');
     res.redirect(`/${userId}/posts/${postId}`);
 }
@@ -57,17 +53,21 @@ module.exports.delete = async (req, res) => {
         req.flash('error', 'The post do not exist')
         return res.redirect(`/${userId}`)
     }
-    await Post.findByIdAndDelete(postId);
     const user = await User.findById(userId);
-    user.posts.splice(user.posts.indexOf(postId), 1);
+    user.posts = user.posts.filter((e) => !e.equals(postId))
     await user.save();
+    await post.deleteOne();
     req.flash('success', 'Successfully delete a post');
     res.redirect(`/${userId}`);
 }
 
 module.exports.read = async (req, res) => {
-    const {userId, postId} = req.params;
+    const {postId} = req.params;
     const post = await Post.findById(postId).populate('user');
+    if (!post) {
+        req.flash('error', 'The post do not exist')
+        return res.redirect(`/${userId}`)
+    }
     const pageTitle = post.title;
-    res.render('posts/details', {post, userId, pageTitle});
+    res.render('posts/details', {post, pageTitle});
 }

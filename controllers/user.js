@@ -72,9 +72,7 @@ module.exports.update = async (req, res) => {
     if (user.avatar.filename) {
         await cloudinary.uploader.destroy(user.avatar.filename);
     }
-    user.username = username;
-    user.email = email;
-    user.bio = bio;
+    await user.updateOne(req.body.user)
     user.avatar.url = req.file.path;
     user.avatar.filename = req.file.filename;
     await user.save();

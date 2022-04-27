@@ -10,13 +10,9 @@
 <body class="d-md-flex flex-column vh-100 ">
     <%- include('../partials/navbar') %> 
 
-    <div class="d-flex">
-        <div class="col-md-6 offset-2">
-            <%- include('../partials/flash') %>  
-            <%- body %> 
-        </div>
-        <div class="col-md-4 offset-1">Bookmarks and Favorites</div>
-    </div>
+    <%- include('../partials/flash') %> 
+    
+    <%- body %> 
 
     <%- include('../partials/footer') %> 
 

@@ -1,43 +1,48 @@
 <% layout('layouts/boilerplate') %> 
-<div class="">
-    <div class="card bg-light text-dark mb-3">
-        <div class="card-title mt-3 mb-3 mx-5">
-            <h3> <%= user.username %> </h3>
-        </div>
-        
-        <% if (user.avatar.url) { %>
-            <div class="mb-3">
-                <img src="<%= user.avatar.url %> " class="card-img px-5" alt="">
-            </div>
-        <% } %>
-        
-        <div class="card-subtitle mb-3 mx-5">
-            <h5>Bio</h5>
-            <% if (user.bio) { %>
-                <div> <%= user.bio %> </div>
-            <% } %>
-        </div>
-        <div class="card-link mb-3 mx-5"> 
-            <% if (currentUser && user._id.equals(currentUser._id)) { %>
-                <a href="/<%= user._id %>/edit"><button class="btn btn-info">Account Settings</button></a>
-                <a href="/<%= user._id %>/posts/new"><button type="button" class="btn btn-primary">New Post</button></a>
-            <% } %>
-            <a href="/users"><button type="button" class="btn btn-secondary">Back</button></a>
-            
-        </div>
-        <div class="mb-3 mx-5">
-            <h5>Posts</h5>
-            <ul class="list-group">
-                <% if (user.posts.length) { %>
-                    <% for( let post of user.posts) { %>
-                        <div>
-                            <a href="/<%= user._id %>/posts/<%= post._id %>" class="list-group-item list-group-item-action mb-2"><%= post.title %></a>
-                        </div>
-                    <% } %>
-                <% } else {%>
-                    <div class="mb-2">No post so far</div>
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-6 offset-2">
+            <div class="card bg-light text-dark mb-3">
+                <div class="card-title mt-3 mb-3 mx-5">
+                    <h3> <%= user.username %> </h3>
+                </div>
+                
+                <% if (user.avatar.url) { %>
+                    <div class="mb-3">
+                        <img src="<%= user.avatar.url %> " class="card-img px-5" alt="">
+                    </div>
                 <% } %>
-            </ul>
+                
+                <div class="card-subtitle mb-3 mx-5">
+                    <h5>Bio</h5>
+                    <% if (user.bio) { %>
+                        <div> <%= user.bio %> </div>
+                    <% } %>
+                </div>
+                <div class="card-link mb-3 mx-5"> 
+                    <% if (currentUser && user._id.equals(currentUser._id)) { %>
+                        <a href="/<%= user._id %>/settings"><button class="btn btn-info">Account Settings</button></a>
+                        <a href="/<%= user._id %>/posts/new"><button type="button" class="btn btn-primary">New Post</button></a>
+                    <% } %>
+                    <a href="/users"><button type="button" class="btn btn-secondary">Back</button></a>
+                    
+                </div>
+                <div class="mb-3 mx-5">
+                    <h5>Posts</h5>
+                    <ul class="list-group">
+                        <% if (user.posts.length) { %>
+                            <% for( let post of user.posts) { %>
+                                <div>
+                                    <a href="/<%= user._id %>/posts/<%= post._id %>" class="list-group-item list-group-item-action mb-2"><%= post.title %></a>
+                                </div>
+                            <% } %>
+                        <% } else {%>
+                            <div class="mb-2">No post so far</div>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
+    
 </div>

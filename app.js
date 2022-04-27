@@ -21,8 +21,9 @@ const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
 const ExpressError = require('./utils/ExpressError')
 
-const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/PostIt';
-mongoose.connect('mongodb://127.0.0.1:27017/PostIt');
+// const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/PostIt';
+const dbUrl = 'mongodb://127.0.0.1:27017/PostIt';
+mongoose.connect(dbUrl);
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -99,8 +100,8 @@ passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use((req, res, next) => {
-    res.locals.currentUser = req.user;
+app.use(function(req, res, next) {
+    res.locals.currentUser = req.user || null;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();

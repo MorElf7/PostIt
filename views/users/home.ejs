@@ -1,6 +1,9 @@
 <% layout('layouts/boilerplate') %> 
 <div class="">
     <div class="card bg-light text-dark mb-3">
+        <% if (user.avatar.url) { %>
+            <img src="<%= user.avatar.url %> " class="card-img-top" alt="">
+        <% } %>
         <div class="card-title mt-3 mb-3 mx-5">
             <h3> <%= user.username %> </h3>
         </div>

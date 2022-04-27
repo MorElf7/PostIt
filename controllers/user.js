@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const cloudinary = require('cloudinary').v2;
 const ExpressError = require('../utils/ExpressError')
 
 module.exports.index = async (req, res) => {
@@ -13,7 +14,7 @@ module.exports.new =  (req, res) => {
 
 module.exports.signup = async (req, res, next) => {
     try {
-        const {username, email, password} = req.body;
+        const {username, email, password} = req.body.user;
         const user = new User({email, username, bio: "",joinedAt: Date.now()});
         const registeredUser = await User.register(user, password);
         req.login(registeredUser, err => {
@@ -61,22 +62,34 @@ module.exports.edit = async (req, res) => {
         req.flash('error', 'The user do not exist')
         return res.redirect(`/`)
     }
-    if (!user._id.equals(req.user._id)) {
-        req.flash('error', 'You do not have permission');
-        return res.redirect(`/${userId}`);
-    }
     res.render('users/edit', {pageTitle});
 }
 
 module.exports.update = async (req, res) => {
     const {userId} = req.params;
+    const {username, email, password, bio} = req.body.user;
     const pageTitle = user.username;
     const user = await User.findById(userId);
-    if (!user._id.equals(req.user._id)) {
-        req.flash('error', 'You do not have permission');
-        return res.redirect(`/${userId}`);
+    if (user.avatar.filename) {
+        await cloudinary.uploader.destroy(user.avatar.filename);
     }
-    user = req.body.user;
+    user.username = username;
+    user.email = email;
+    user.bio = bio;
+    user.avatar = req.file.map(f => ({url: f.path, filename: f.filename}));
     await user.save();
     res.redirect(`/${userId}`, {pageTitle});
+}
+
+module.exports.delete = async (req, res) => {
+    const {userId} = req.params;
+    const user = await User.findById(userId);
+    console.log(user.avatar)
+    if (user.avatar.filename) {
+        await cloudinary.uploader.destroy(user.avatar.filename);
+    }
+    await User.findByIdAndDelete(userId);
+    req.logout();
+    req.flash('success', 'Account Deleted');
+    res.redirect('/');
 }

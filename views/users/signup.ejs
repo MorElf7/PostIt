@@ -8,21 +8,21 @@
         <form action="/users" method="POST" class="needs-validation" novalidate>
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input class="form-control" type="text" id="username" name="username" required>
+                <input class="form-control" type="text" id="username" name="user[username]" required>
                 <div class="invalid-feedback">
                     Please provide an username.
                 </div>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input class="form-control" name="email" id="email" type="email" required></input>
+                <input class="form-control" name="user[email]" id="email" type="email" required></input>
                 <div class="invalid-feedback">
                     Please provide an email.
                 </div>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input class="form-control" name="password" id="password" type="password" required></input>
+                <input class="form-control" name="user[password]" id="password" type="password" required></input>
                 <div class="invalid-feedback">
                     Please provide a password.
                 </div>

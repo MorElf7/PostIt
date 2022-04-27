@@ -29,16 +29,20 @@ module.exports.postSchema = Joi.object({
     post: Joi.object({
         title: Joi.string().required().escapeHTML(),
         description: Joi.string().required().escapeHTML(),
-        image: Joi.string().escapeHTML(),
-        user: Joi.objectId().required()
     }).required()
 })
 
 module.exports.userSchema = Joi.object({
     user: Joi.object({
-        email: Joi.string().required().escapeHTML(),
-        bio: Joi.string().escapeHTML(),
+        username: Joi.string().alphanum().required().escapeHTML(),
+        email: Joi.string().email().required().escapeHTML(),
+        bio: Joi.string().allow('').escapeHTML(),
+        // password: Joi.string().required().escapeHTML(),
         posts: Joi.array(),
-        joinedAt: Joi.date()
+        joinedAt: Joi.date(),
+        // avatar: Joi.object({
+        //     url: Joi.string().escapeHTML(),
+        //     filename: Joi.string().escapeHTML(),
+        // }),
     }).required()
 })

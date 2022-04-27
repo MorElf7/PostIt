@@ -39,12 +39,21 @@ router.get('/:userId',
 
 //Edit User
 router.get('/:userId/edit', 
-    middlewares.isSignIn, 
-    middlewares.validateUser, 
-    wrapAsync(User.edit))
+    middlewares.isSignIn,  
+    middlewares.isUser,
+    wrapAsync(User.edit));
 
 router.put('/:userId', 
     middlewares.isSignIn, 
+    middlewares.isUser,
+    middlewares.validateUser,
+    // upload.single('avatar'),
     wrapAsync(User.update))
+
+//Delete User
+router.delete('/:userId',
+    middlewares.isSignIn,
+    middlewares.isUser,
+    wrapAsync(User.delete))
 
 module.exports = router

@@ -42,7 +42,9 @@ module.exports.update = async (req, res) => {
         req.flash('error', 'You do not have permission');
         return res.redirect(`/${userId}/posts/${postId}`);
     }
-    post = req.body.post;
+    post.title = req.body.post.title;
+    post.description = req.body.post.description;
+    // await Post.findByIdAndUpdate(postId, {...req.params.post});
     await post.save();
     req.flash('success', 'Successfully edit a post');
     res.redirect(`/${userId}/posts/${postId}`);
@@ -58,7 +60,7 @@ module.exports.delete = async (req, res) => {
     await Post.findByIdAndDelete(postId);
     const user = await User.findById(userId);
     user.posts.splice(user.posts.indexOf(postId), 1);
-    user.save();
+    await user.save();
     req.flash('success', 'Successfully delete a post');
     res.redirect(`/${userId}`);
 }

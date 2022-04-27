@@ -8,26 +8,26 @@
         <form action="/<%= currentUser._id %>?_method=PUT" method="POST" class="needs-validation mb-2" enctype="multipart/form-data" novalidate>
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input class="form-control" type="text" id="username" name="username" value="<%= currentUser.username %>" required>
+                <input class="form-control" type="text" id="username" name="user[username]" value="<%= currentUser.username %>" required>
                 <div class="invalid-feedback">
                     Please provide an username.
                 </div>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input class="form-control" name="email" id="email" type="email" value="<%= currentUser.email %>" required></input>
+                <input class="form-control" name="user[email]" id="email" type="email" value="<%= currentUser.email %>" required></input>
                 <div class="invalid-feedback">
                     Please provide an email.
                 </div>
             </div>
-            <!-- <div class="mb-3">
+            <div class="mb-3">
                 <label for="avatar" class="form-label">Avatar</label>
                 <input class="form-control" type="file" id="avatar" name="avatar">
-            </div> -->
+            </div>
             
             <div class="mb-3">
                 <label for="bio" class="form-label">Bio</label>
-                <textarea class="form-control" name="bio" id="bio" rows="5" value="<%= currentUser.bio %>"></textarea>
+                <textarea class="form-control" name="user[bio]" id="bio" rows="5"><%= currentUser.bio %></textarea>
             </div>
             <div>
                 <button type="submit" class="btn btn-success">Save</button>
@@ -35,7 +35,7 @@
                 
             </div>
         </form>
-        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete" type="button">Delete Account</button>
+        <button class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#delete" type="button">Delete Account</button>
 
         <div class="modal fade" id="delete" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">

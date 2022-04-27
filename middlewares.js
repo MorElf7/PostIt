@@ -4,7 +4,6 @@ const User = require('./models/user');
 const {postSchema, userSchema} = require('./schemas');
 
 module.exports.isSignIn = (req, res, next) => {
-    console.log(req.body)
     if (!req.isAuthenticated()) {
         req.session.returnTo = req.originalUrl;
         req.flash('error', 'You must be signed in');
@@ -24,7 +23,6 @@ module.exports.isAuthor = async (req, res, next) => {
 }
 
 module.exports.isUser = async (req, res, next) => {
-    console.log(req.body)
     const {userId} = req.params;
     const user = await User.findById(userId);
     if (!user.equals(req.user._id)) {
@@ -45,7 +43,6 @@ module.exports.validatePost = (req, res, next) => {
 }
 
 module.exports.validateUser = (req, res, next) => {
-    console.log(req.body)
     const { error } = userSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')

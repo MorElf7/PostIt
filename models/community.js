@@ -9,10 +9,11 @@ const communitySchema = new Schema({
             filename: String
         }
     ,
-    user: {
+    members: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
-    }
-}, {timestamps: true});
+    }],
+    createdAt: Date
+});
 
 module.exports = mongoose.model('Community', communitySchema);

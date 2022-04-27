@@ -15,7 +15,7 @@ module.exports.new =  (req, res) => {
 module.exports.signup = async (req, res, next) => {
     try {
         const {username, email, password} = req.body.user;
-        const user = new User({email, username, bio: "",joinedAt: Date.now()});
+        const user = new User({email, username, bio: "",joinedAt: Date.now(), avatar: {}});
         const registeredUser = await User.register(user, password);
         req.login(registeredUser, err => {
             if (err) return next(err);
@@ -68,7 +68,6 @@ module.exports.edit = async (req, res) => {
 module.exports.update = async (req, res) => {
     const {userId} = req.params;
     const {username, email, password, bio} = req.body.user;
-    const pageTitle = user.username;
     const user = await User.findById(userId);
     if (user.avatar.filename) {
         await cloudinary.uploader.destroy(user.avatar.filename);
@@ -76,9 +75,10 @@ module.exports.update = async (req, res) => {
     user.username = username;
     user.email = email;
     user.bio = bio;
-    user.avatar = req.file.map(f => ({url: f.path, filename: f.filename}));
+    user.avatar.url = req.file.path;
+    user.avatar.filename = req.file.filename;
     await user.save();
-    res.redirect(`/${userId}`, {pageTitle});
+    res.redirect(`/${userId}`);
 }
 
 module.exports.delete = async (req, res) => {

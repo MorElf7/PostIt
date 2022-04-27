@@ -18,7 +18,6 @@ router.get('/users/signup',
     User.new)
 
 router.post('/users', 
-    middlewares.validateUser, 
     wrapAsync(User.signup))
 
 //Sign In
@@ -46,8 +45,8 @@ router.get('/:userId/edit',
 router.put('/:userId', 
     middlewares.isSignIn, 
     middlewares.isUser,
+    upload.single('avatar'),
     middlewares.validateUser,
-    // upload.single('avatar'),
     wrapAsync(User.update))
 
 //Delete User

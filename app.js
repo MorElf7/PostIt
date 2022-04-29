@@ -20,7 +20,10 @@ const User = require('./models/user');
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
 const communityRouter = require('./routes/community');
-const ExpressError = require('./utils/ExpressError')
+const commentRouter = require('./routes/comment');
+const ExpressError = require('./utils/ExpressError');
+const wrapAsync = require('./utils/wrapAsync');
+const Post = require('./models/post');
 
 // const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/PostIt';
 const dbUrl = 'mongodb://127.0.0.1:27017/PostIt';
@@ -48,8 +51,7 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'static')));
 app.use(mongoSanitize())
 
-app.use(
-    helmet.contentSecurityPolicy({
+app.use(helmet.contentSecurityPolicy({
         directives: {
             defaultSrc: [],
             connectSrc: ["'self'", ...allowedContent.connectSrcUrls],
@@ -65,9 +67,11 @@ app.use(
                 "https://images.unsplash.com/",
             ],
             fontSrc: ["'self'", ...allowedContent.fontSrcUrls],
+            scriptSrcAttr: ["'unsafe-inline'",],
         },
     })
 );
+// app.use(helmet({contentSecurityPolicy: false}));
 
 const store = MongoDBStore.create({
     mongoUrl: dbUrl,
@@ -109,12 +113,14 @@ app.use(function(req, res, next) {
 })
 
 
-app.get('/', (req, res) => {
-    res.render('home', {pageTitle: 'Home'});
-})
+app.get('/', wrapAsync(async (req, res) => {
+    const posts = await Post.find({}).populate({path: 'user', select: 'username'});
+    res.render('home', {posts, pageTitle: 'Home'});
+}))
 
 app.use('/:userId/posts', postRouter);
-app.use('/communities', communityRouter)
+// app.use('/communities', communityRouter)
+app.use('/:userId/posts/:postId/comments', commentRouter);
 app.use('/', userRouter);
 
 app.all('*', (req, res, next) => {

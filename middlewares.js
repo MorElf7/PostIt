@@ -1,7 +1,8 @@
 const ExpressError = require("./utils/ExpressError");
 const Post = require('./models/post');
 const User = require('./models/user');
-const {postSchema, userSchema} = require('./schemas');
+const Comment = require('./models/comment');
+const {postSchema, userSchema, commentSchema} = require('./schemas');
 
 module.exports.isSignIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -12,10 +13,20 @@ module.exports.isSignIn = (req, res, next) => {
     next()
 }
 
-module.exports.isAuthor = async (req, res, next) => {
+module.exports.isPostAuthor = async (req, res, next) => {
     const {userId, postId} = req.params;
     const post = await Post.findById(postId);
     if (!post.user.equals(req.user._id)) {
+        req.flash('error', 'You do not have permission')
+        return res.redirect(`/${userId}/posts/${postId}`);
+    }
+    next();
+}
+
+module.exports.isCommentAuthor = async (req, res, next) => {
+    const {userId, postId, commentId} = req.params;
+    const comment = await Comment.findById(commentId);
+    if (!comment.user.equals(req.user._id)) {
         req.flash('error', 'You do not have permission')
         return res.redirect(`/${userId}/posts/${postId}`);
     }
@@ -44,6 +55,16 @@ module.exports.validatePost = (req, res, next) => {
 
 module.exports.validateUser = (req, res, next) => {
     const { error } = userSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next()
+    }
+}
+
+module.exports.validateComment = (req, res, next) => {
+    const { error } = commentSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)

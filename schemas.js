@@ -46,3 +46,9 @@ module.exports.userSchema = Joi.object({
         // }),
     }).required()
 })
+
+module.exports.commentSchema = Joi.object({
+    comment: Joi.object({
+        content: Joi.string().required().escapeHTML()
+    }).required()
+})

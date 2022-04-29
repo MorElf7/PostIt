@@ -15,6 +15,10 @@ module.exports.create = async (req, res) => {
     const {userId} = req.params;
     const post = new Post(req.body.post);
     const user = await User.findById(userId);
+    if (!user) {
+        req.flash('error', 'The user do not exist')
+        return res.redirect('/')
+    }
     post.user = user;
     user.posts.push(post);
     await post.save();
@@ -26,6 +30,11 @@ module.exports.create = async (req, res) => {
 module.exports.edit = async (req, res) => {
     const {userId, postId} = req.params;
     const post = await Post.findById(postId);
+    const user = await User.findById(userId);
+    if (!user) {
+        req.flash('error', 'The user do not exist')
+        return res.redirect('/')
+    }
     if (!post) {
         req.flash('error', 'The post do not exist')
         return res.redirect(`/${userId}`)
@@ -36,10 +45,15 @@ module.exports.edit = async (req, res) => {
 
 module.exports.update = async (req, res) => {
     const {userId, postId} = req.params;
+    const user = await User.findById(userId);
+    if (!user) {
+        req.flash('error', 'The user do not exist')
+        return res.redirect('/')
+    }
     const post = await Post.findById(postId);
     if (!post) {
         req.flash('error', 'The post do not exist')
-        return res.redirect(`/${userId}`)
+        return res.redirect('/')
     }
     await post.updateOne(req.body.post);
     req.flash('success', 'Successfully edit a post');
@@ -48,22 +62,26 @@ module.exports.update = async (req, res) => {
 
 module.exports.delete = async (req, res) => {
     const {userId, postId} = req.params;
+    const user = await User.findById(userId);
+    if (!user) {
+        req.flash('error', 'The user do not exist')
+        return res.redirect('/')
+    }
     const post = await Post.findById(postId);
     if (!post) {
         req.flash('error', 'The post do not exist')
         return res.redirect(`/${userId}`)
     }
-    const user = await User.findById(userId);
     user.posts = user.posts.filter((e) => !e.equals(postId))
     await user.save();
-    await post.deleteOne();
+    await Post.findByIdAndDelete(postId);
     req.flash('success', 'Successfully delete a post');
     res.redirect(`/${userId}`);
 }
 
 module.exports.read = async (req, res) => {
     const {postId} = req.params;
-    const post = await Post.findById(postId).populate('user');
+    const post = await Post.findById(postId).populate('user').populate({path: 'comments', populate: 'user'});
     if (!post) {
         req.flash('error', 'The post do not exist')
         return res.redirect(`/${userId}`)

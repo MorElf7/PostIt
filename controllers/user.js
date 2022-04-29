@@ -43,7 +43,7 @@ module.exports.signin = (req, res) => {
 
 module.exports.signout = (req, res) => {
     req.logout();
-    req.flash('success', 'Signed Out');
+    // req.flash('success', 'Signed Out');
     res.redirect('/');
 }
 
@@ -82,7 +82,6 @@ module.exports.update = async (req, res) => {
 module.exports.delete = async (req, res) => {
     const {userId} = req.params;
     const user = await User.findById(userId);
-    console.log(user.avatar)
     if (user.avatar.filename) {
         await cloudinary.uploader.destroy(user.avatar.filename);
     }

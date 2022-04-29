@@ -29,11 +29,11 @@
                 </div>
                 <div class="mb-3 mx-5">
                     <h5>Posts</h5>
-                    <ul class="list-group">
+                    <ul class="list-group list-group-flush">
                         <% if (user.posts.length) { %>
                             <% for( let post of user.posts) { %>
                                 <div>
-                                    <a href="/<%= user._id %>/posts/<%= post._id %>" class="list-group-item list-group-item-action mb-2"><%= post.title %></a>
+                                    <a href="/<%= user._id %>/posts/<%= post._id %>" class="list-group-item list-group-item-action"><%= post.title %></a>
                                 </div>
                             <% } %>
                         <% } else {%>

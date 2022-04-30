@@ -5,6 +5,10 @@ const Comment = require('./comment');
 const postSchema = new Schema({
     title: String,
     description: String,
+    image: {
+        url: String,
+        filename: String,
+    },
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'

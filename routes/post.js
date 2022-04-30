@@ -1,20 +1,22 @@
 const express = require('express');
 const router = express.Router({mergeParams: true});
+const multer = require('multer');
+const {storage} = require('../cloudinary')
+const upload = multer({storage})
 
 const Post = require('../controllers/post')
 const wrapAsync = require('../utils/wrapAsync');
 const middlewares = require('../middlewares');
 
-
 //Create Post
 router.get('/new', 
     middlewares.isSignIn, 
-    // middlewares.isUser,
     Post.new)
 
 router.post('', 
     middlewares.isSignIn, 
     middlewares.isUser,
+    upload.single('post[image]'),
     middlewares.validatePost, 
     wrapAsync(Post.create))
 
@@ -27,6 +29,7 @@ router.get('/:postId/edit',
 router.put('/:postId', 
     middlewares.isSignIn, 
     middlewares.isPostAuthor, 
+    upload.single('post[image]'),
     middlewares.validatePost, 
     wrapAsync(Post.update))
 

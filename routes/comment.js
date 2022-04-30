@@ -13,6 +13,7 @@ router.post('/',
 router.put('/:commentId', 
     middlewares.isSignIn,
     middlewares.isCommentAuthor,
+    middlewares.validateComment,
     wrapAsync(Comment.update))
 
 //Delete

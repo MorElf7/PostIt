@@ -8,7 +8,8 @@ function editComment() {
     textArea.innerHTML = commentReadOnly.innerHTML;
     textArea.setAttribute('class', 'col-md mb-2 text-start form-control');
     textArea.setAttribute('name', 'comment[content]');
-    // textArea.setAttribute('height', '30px');
+    textArea.setAttribute('id', 'editCommentTextArea');
+    textArea.setAttribute('rows', '2');
 
     commentReadOnly.parentNode.insertBefore(textArea, commentReadOnly);
     commentReadOnly.parentNode.removeChild(commentReadOnly);

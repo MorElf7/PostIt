@@ -6,13 +6,17 @@
                 <h3>Edit Post</h3>
             </div>
             <div class="">
-                <form action="/<%= post.user._id %>/posts/<%= post._id %>?_method=PUT" method="POST" class="needs-validation" novalidate>
+                <form action="/<%= post.user._id %>/posts/<%= post._id %>?_method=PUT" method="POST" class="needs-validation"  enctype="multipart/form-data" novalidate>
                     <div class="mb-3"
                         <label for="title" class="form-label">Title</label>
                         <input type="text" id="title" name="post[title]" value="<%= post.title %>" class="form-control" required>
                         <div class="invalid-feedback">
                             Please provide a title.
                         </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Image</label>
+                        <input class="form-control" type="file" id="image" name="post[image]">
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>

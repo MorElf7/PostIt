@@ -67,7 +67,6 @@ module.exports.edit = async (req, res) => {
 
 module.exports.update = async (req, res) => {
     const {userId} = req.params;
-    const {username, email, password, bio} = req.body.user;
     const user = await User.findById(userId);
     if (user.avatar.filename) {
         await cloudinary.uploader.destroy(user.avatar.filename);
@@ -77,6 +76,20 @@ module.exports.update = async (req, res) => {
     user.avatar.filename = req.file.filename;
     await user.save();
     res.redirect(`/${userId}`);
+}
+
+module.exports.follow = async (req, res) => {
+    const {userId} = req.params;
+    const user = await User.findById(userId);
+    if (req.body.follow) {
+        user.follows.push(req.body.follow);
+        await user.save();
+        res.redirect(`/${req.body.follow}`);
+    } else if (req.body.unfollow) {
+        user.follows = user.follows.filter(e => !e._id.equals(req.body.unfollow));
+        await user.save();
+        res.redirect(`/${req.body.unfollow}`);
+    }
 }
 
 module.exports.delete = async (req, res) => {

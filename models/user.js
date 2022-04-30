@@ -18,13 +18,15 @@ const userSchema = new Schema({
         url: String,
         filename: String
     },
+    follows: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+    }],
     bio: String,
-    posts: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Post'
-        }
-    ],
+    posts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Post'
+    }],
     joinedAt: Date
 });
 userSchema.plugin(passportLocalMongoose);

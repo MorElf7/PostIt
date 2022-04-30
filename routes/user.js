@@ -49,6 +49,11 @@ router.put('/:userId',
     middlewares.validateUser,
     wrapAsync(User.update))
 
+router.patch('/:userId',
+    middlewares.isSignIn, 
+    wrapAsync(User.follow)
+);
+
 //Delete User
 router.delete('/:userId',
     middlewares.isSignIn,

@@ -20,7 +20,6 @@ module.exports.create = async (req, res) => {
     res.redirect(`/${userId}/posts/${postId}`);
 }
 
-
 module.exports.update = async (req, res) => {
     const {userId, postId, commentId} = req.params;
     const user = await User.findById(userId);
@@ -44,6 +43,7 @@ module.exports.update = async (req, res) => {
 
 module.exports.delete = async (req, res) => {
     const {userId, postId, commentId} = req.params;
+    const user = User.findById(userId);
     if (!user) {
         req.flash('error', 'The user do not exist')
         return res.redirect('/');

@@ -114,9 +114,24 @@ app.use(function(req, res, next) {
 
 
 app.get('/', wrapAsync(async (req, res) => {
-    const posts = await Post.find({}).populate({path: 'user', select: 'username'});
+    let posts = null;
+    if (req.user) {
+        const user = await User.findById(req.user._id);
+        posts = await Post.find({user: {$in: user.follows}}).populate('user');
+        posts.sort((a, b) => {
+            return a.updatedAt > b.updatedAt ? 1 : -1;
+        })
+    }
     res.render('home', {posts, pageTitle: 'Home'});
 }))
+
+app.get('/posts', wrapAsync(async (req, res) => {
+    let posts = await Post.find({});
+    posts.sort((a, b) => {
+        return a.updatedAt > b.updatedAt ? 1 : -1;
+    })
+    res.render('posts/index', {posts, pageTitle: 'All Posts'});
+}));
 
 app.use('/:userId/posts', postRouter);
 // app.use('/communities', communityRouter)

@@ -2,9 +2,26 @@
 <div class="container">
     <div class="row mt-3">
         <div class="col-md-6 offset-2">
-            <div class="card bg-light text-dark mb-3">
+            <div class="card bg-white border-white text-dark mb-3">
                 <div class="card-title mt-3 mb-3 mx-5">
-                    <h3> <%= user.username %> </h3>
+                    <div class="row">
+                        <div class="col-9">
+                            <h3> <%= user.username %> </h3>
+                        </div>
+                        <div class="col-auto justify-content-end">
+                            <% if (!currentUser.follows.includes(user._id)) { %>
+                                <form action="/<%= currentUser._id %>?_method=PATCH" method="POST">
+                                    <input type="text" name="follow" id="" value="<%= user._id %>"  hidden>
+                                    <button class="btn btn-outline-primary" type="submit">Follow</button>
+                                </form>
+                            <% } else {%>
+                                <form action="/<%= currentUser._id %>?_method=PATCH" method="POST">
+                                    <input type="text" name="unfollow" id="" value="<%= user._id %>"  hidden>
+                                    <button class="btn btn-outline-secondary" type="submit">Unfollow</button>
+                                </form>
+                            <% } %> 
+                        </div>
+                    </div>
                 </div>
                 
                 <% if (user.avatar.url) { %>
@@ -21,10 +38,10 @@
                 </div>
                 <div class="card-link mb-3 mx-5"> 
                     <% if (currentUser && user._id.equals(currentUser._id)) { %>
-                        <a href="/<%= user._id %>/settings"><button class="btn btn-info">Account Settings</button></a>
-                        <a href="/<%= user._id %>/posts/new"><button type="button" class="btn btn-primary">New Post</button></a>
+                        <a href="/<%= user._id %>/settings"><button class="btn btn-primary">Account Settings</button></a>
+                        <a href="/<%= user._id %>/posts/new"><button type="button" class="btn btn-success">New Post</button></a>
                     <% } %>
-                    <a href="/users"><button type="button" class="btn btn-secondary">Back</button></a>
+                    <a href="#"><button type="button" class="btn btn-secondary" onclick="history.back()">Back</button></a>
                     
                 </div>
                 <div class="mb-3 mx-5">

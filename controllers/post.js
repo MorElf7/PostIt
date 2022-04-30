@@ -1,5 +1,6 @@
 const Post = require('../models/post');
 const User = require('../models/user');
+const cloudinary = require('cloudinary').v2;
 const ExpressError = require('../utils/ExpressError')
 
 module.exports.index = async (req, res) => {
@@ -21,6 +22,17 @@ module.exports.create = async (req, res) => {
     }
     post.user = user;
     user.posts.push(post);
+    if (user.posts.length >= 2) {
+        user.posts.sort((a, b) => {
+            return a.updatedAt > b.updatedAt ? 1 : -1;
+        });
+    }
+    if (post.image.filename) {
+        await cloudinary.uploader.destroy(post.image.filename);
+    }
+    post.image.url = req.file.path;
+    post.image.filename = req.file.filename;
+    await post.save();
     await post.save();
     await user.save();
     req.flash('success', 'Successfully create a post');
@@ -56,6 +68,12 @@ module.exports.update = async (req, res) => {
         return res.redirect('/')
     }
     await post.updateOne(req.body.post);
+    if (post.image.filename) {
+        await cloudinary.uploader.destroy(post.image.filename);
+    }
+    post.image.url = req.file.path;
+    post.image.filename = req.file.filename;
+    await post.save();
     req.flash('success', 'Successfully edit a post');
     res.redirect(`/${userId}/posts/${postId}`);
 }

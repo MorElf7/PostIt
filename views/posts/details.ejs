@@ -12,12 +12,11 @@
                         <div><%= post.updatedAt.toLocaleString() %></div>
                     </div>
                 </div>
-        
                 
                 <% if (post.image) { %>
-                <div class="mb-3">
-                    <img class="card-img px-5" src="<%= post.image %>"  alt="">
-                </div>
+                    <div class="mb-3">
+                        <img class="card-img px-5" src="<%= post.image.url %>"  alt="">
+                    </div>
                 <% } %>
                 
                 <div class="card-body mb-3 mx-5">
@@ -32,14 +31,14 @@
                             <a href="/<%= post.user._id %>/posts/<%= post._id %>/edit"><button type="button" class="btn btn-primary mb-3">Edit</button></a>
                             <button type="submit" class="btn btn-primary mb-3">Delete</button>
                         <% } %>
-                        <a href="/<%= post.user._id %>"><button type="button" class="btn btn-secondary mb-3">Back</button></button></a>
+                        <a href="#"><button type="button" class="btn btn-secondary mb-3" onclick="history.back()">Back</button></button></a>
                     </form>
                 </div>
 
                 <div class="card-body">    
                     <form class="row mb-3 mx-2" action="/<%= post.user._id %>/posts/<%= post._id %>/comments" method="post">
                         <div class="col-9">
-                            <textarea resize="none" class="form-control" name="comment[content]" id="content" height="30px" placeholder="Leave your comemnt here"></textarea>
+                            <textarea resize="none" class="form-control" name="comment[content]" id="content" rows="2" placeholder="Leave your comemnt here"></textarea>
                         </div>
                         <div class="col">
                             <button class="btn btn-outline-success" type="submit">Comment</button>
@@ -49,7 +48,7 @@
                         <% for(let comment of post.comments) { %>
                             <div class="list-group-item bg-white">
                                 <div class="row mx-1">
-                                    <div class="col-md-8">
+                                    <div class="col-md-7">
                                         <h5 class=""><a href="/<%= comment.user._id %> "><%= comment.user.username %></a></h5>
                                         <form class="mb-2" action="/<%= post.user._id %>/posts/<%= post._id %>/comments/<%= comment._id %>?_method=PUT" method="post">
                                             <div class="row">
@@ -65,8 +64,10 @@
                                         <% if (currentUser._id.equals(comment.user._id)) { %>
                                         <button id="menu" class="btn" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
                                         <ul class="dropdown-menu" aria-labelledby="menu">
-                                            <li><a class="dropdown-item" onclick="editComment()" href="#">Edit</a></li>
-                                            <li><a class="dropdown-item" href="#">Delete action</a></li>
+                                            <form class="" action="/<%= post.user._id %>/posts/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE" method="post">
+                                                <li class="dropdown-item"><a onclick="editComment()" href="#">Edit</a></li>
+                                                <li class=""><button class="dropdown-item" type="submit">Delete</button></li>
+                                            </form>
                                         </ul>
                                         <% } %>
                                     </div>

@@ -10,12 +10,12 @@
                 <div class="card border mx-3 border-white">
                     <div class="card-body">                        
                         <div class="card-title">
-                            <h4><%= post.title %></h3> 
+                            <a href="/<%= post.user._id %>/posts/<%= post._id %>"><h4><%= post.title %></h4></a>
                         </div>
                         <div class="card-subtitle text-muted">
                             <div class="row">
                                 <div class="col text-start">
-                                    Posted by <%= post.user.username %>
+                                    Posted by <a href="/<%= post.user._id %>"><%= post.user.username %></a>
                                 </div>
                                 <div class="col text-end ">
                                     <%= post.updatedAt.toLocaleString() %>

@@ -8,6 +8,15 @@ a:hover {
     color:black;
 }
 
+textarea {
+    resize: none;
+}
+
 #more {
     display: none;
+}
+
+#editCommentTextArea {
+    border: nones;
+    outline: none;
 }

@@ -1,21 +1,29 @@
 <% layout('layouts/boilerplate') %> 
 <div class="container">
     <div class="row mt-3">
-        <div class="col-md-6 offset-2">
-            <div class="d-flex justify-content-center mb-3">
-                <h1>All Blog Posts</h1>
+        <div class="col-md-6 border-white offset-3">
+            <div class="d-flex justify-content-center mb-3 border-bottom">
+                <h1>Recent Posts</h1>
             </div>
             <div class="">
-                <ul class="">
+                <ul class="list-group list-group-flush">
                     <% for (let post of posts) {%>
-                    <div class="card border-info mb-3 w-100">
-                        <a class="btn btn-light" href="/<%= post.user %>/posts/<%= post._id %>">
-                            <div class="card-body">
+                    <li class="list-group-item bg-white">
+                        <div class="card border-white mb-3 w-100">
+                            <div class="card-body mb-3">
                                 <h4 class="card-title"><%= post.title %></h4>
-                                <div class="card-text"><%= post.description %></div>
+                                <div class="card-subtitle">
+                                    Posted by <a href="/<%= post.user_id %>"><%= post.user_id %></a>
+                                </div>
                             </div>
-                        </a>
-                    </div>
+                            <a class="btn btn-white" href="/<%= post.user %>/posts/<%= post._id %>">
+                                <div class="card-body ">
+                                    <h4 class="card-title"><%= post.title %></h4>
+                                    <div class="card-text"><%= post.description %></div>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
                     <%}%>  
                 </ul>
             </div>

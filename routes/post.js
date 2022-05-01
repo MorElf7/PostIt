@@ -16,7 +16,7 @@ router.get('/new',
 router.post('', 
     middlewares.isSignIn, 
     middlewares.isUser,
-    upload.single('post[image]'),
+    upload.single('image'),
     middlewares.validatePost, 
     wrapAsync(Post.create))
 
@@ -29,7 +29,7 @@ router.get('/:postId/edit',
 router.put('/:postId', 
     middlewares.isSignIn, 
     middlewares.isPostAuthor, 
-    upload.single('post[image]'),
+    upload.single('image'),
     middlewares.validatePost, 
     wrapAsync(Post.update))
 

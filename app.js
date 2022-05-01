@@ -92,7 +92,7 @@ const sessionConfig = {
     cookie: {
         httpOnly: true,
         expires: Date.now() + 1000 * 60 * 60 * 24,
-        maxAge: 1000 * 60 * 60 * 24
+        maxAge: 1000 * 60 * 60 * 24,
     }  
 }
 app.use(session(sessionConfig))
@@ -119,22 +119,32 @@ app.get('/', wrapAsync(async (req, res) => {
         const user = await User.findById(req.user._id);
         posts = await Post.find({user: {$in: user.follows}}).populate('user');
         posts.sort((a, b) => {
-            return a.updatedAt > b.updatedAt ? 1 : -1;
+            return a.updatedAt < b.updatedAt ? 1 : -1;
         })
     }
     res.render('home', {posts, pageTitle: 'Home'});
 }))
 
 app.get('/posts', wrapAsync(async (req, res) => {
-    let posts = await Post.find({});
+    let posts = await Post.find({}).populate('user');
     posts.sort((a, b) => {
-        return a.updatedAt > b.updatedAt ? 1 : -1;
+        return a.updatedAt < b.updatedAt ? 1 : -1;
     })
     res.render('posts/index', {posts, pageTitle: 'All Posts'});
 }));
 
-app.use('/:userId/posts', postRouter);
+app.post('/search', wrapAsync(async (req, res) => {
+    const {name} = req.body;
+    User.createIndexes();
+    let list = await User.find({ $text: { $search: name}}).populate('posts');
+    Post.createIndexes();
+    const posts = await Post.find({ $text: { $search: name}}).populate('user');
+    list.push(...posts);
+    res.render('searchResult', {list, pageTitle: 'Search'});
+}));
+
 // app.use('/communities', communityRouter)
+app.use('/:userId/posts', postRouter);
 app.use('/:userId/posts/:postId/comments', commentRouter);
 app.use('/', userRouter);
 

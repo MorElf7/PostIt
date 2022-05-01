@@ -15,7 +15,7 @@
                         <div class="card-subtitle text-muted">
                             <div class="row">
                                 <div class="col text-start">
-                                    Posted by <a href="/<%= post.user._id %>"><%= post.user.username %></a>
+                                    <a href="/<%= post.user._id %>">Posted by <%= post.user.username %></a>
                                 </div>
                                 <div class="col text-end ">
                                     <%= post.updatedAt.toLocaleString() %>
@@ -29,8 +29,7 @@
                 </div>
             </div>
         <% } %> 
-        </ul>
-        
+        </ul> 
     </div>
 </div>
 

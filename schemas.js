@@ -26,6 +26,10 @@ const extension = (joi) => ({
 const Joi = BaseJoi.extend(extension)
 
 module.exports.postSchema = Joi.object({
+    image: Joi.object({
+        url: Joi.string().allow('').required().escapeHTML(),
+        filename: Joi.string().allow('').required().escapeHTML(),
+    }),
     post: Joi.object({
         title: Joi.string().required().escapeHTML(),
         description: Joi.string().required().escapeHTML(),
@@ -33,17 +37,18 @@ module.exports.postSchema = Joi.object({
 })
 
 module.exports.userSchema = Joi.object({
+    avatar: Joi.object({
+        url: Joi.string().allow('').required().escapeHTML(),
+        filename: Joi.string().allow('').required().escapeHTML(),
+    }),
+    oldPassword: Joi.string().allow('').escapeHTML(),
+    newPassword: Joi.string().allow('').escapeHTML(),
     user: Joi.object({
         username: Joi.string().alphanum().required().escapeHTML(),
         email: Joi.string().email().required().escapeHTML(),
         bio: Joi.string().allow('').escapeHTML(),
-        // password: Joi.string().required().escapeHTML(),
         posts: Joi.array(),
         joinedAt: Joi.date(),
-        // avatar: Joi.object({
-        //     url: Joi.string().escapeHTML(),
-        //     filename: Joi.string().escapeHTML(),
-        // }),
     }).required()
 })
 

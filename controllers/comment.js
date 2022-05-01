@@ -12,7 +12,7 @@ module.exports.create = async (req, res) => {
     post.comments.push(comment);
     if (post.comments.length >= 2) {
         post.comments.sort((a, b) => {
-            return a.updatedAt > b.updatedAt ? 1 : -1;
+            return a.updatedAt < b.updatedAt ? 1 : -1;
         });
     }
     await comment.save();

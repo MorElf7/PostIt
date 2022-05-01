@@ -2,7 +2,6 @@ const User = require('../models/user');
 const Community = require('../models/community');
 const cloudinary = require('cloudinary').v2;
 const ExpressError = require('../utils/ExpressError');
-const flash = require('connect-flash/lib/flash');
 
 module.exports.index = async (req, res) => {
     const communities = await Community.find({});
@@ -20,6 +19,8 @@ module.exports.create = async (req, res) => {
     const admin = await User.findById(req.user._id);
     community.admin = admin;
     community.createdAt = Date.now();
+    community.members.push(admin);
+    community.moderators.push(admin);
     await community.save();
     req.flash('success', 'Successfully create a community');
     res.redirect(`/communities/${community._id}`);
@@ -28,9 +29,9 @@ module.exports.create = async (req, res) => {
 module.exports.edit = async (req, res) => {
     const {communityId} = req.params;
     const community = await Community.findById(communityId)
-                        .populate({path: 'admin', select: ['username', '_id', 'avatar']})
-                        .populate({path: 'moderators', select: ['username', '_id', 'avatar']})
-                        .populate({path: 'members', select: ['username', '_id', 'avatar']});
+                        .populate('admin')
+                        .populate('moderators')
+                        .populate('members');
     if (!community) {
         req.flash('error', 'The community you are lookng for do not exist');
         res.redirect(``);

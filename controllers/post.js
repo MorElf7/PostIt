@@ -24,14 +24,16 @@ module.exports.create = async (req, res) => {
     user.posts.push(post);
     if (user.posts.length >= 2) {
         user.posts.sort((a, b) => {
-            return a.updatedAt > b.updatedAt ? 1 : -1;
+            return a.updatedAt < b.updatedAt ? 1 : -1;
         });
     }
-    if (post.image.filename) {
-        await cloudinary.uploader.destroy(post.image.filename);
+    if (req.file) {
+        if (post.image.filename) {
+            await cloudinary.uploader.destroy(post.image.filename);
+        }
+        post.image.url = req.file.path;
+        post.image.filename = req.file.filename;
     }
-    post.image.url = req.file.path;
-    post.image.filename = req.file.filename;
     await post.save();
     await post.save();
     await user.save();

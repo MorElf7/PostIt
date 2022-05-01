@@ -1,7 +1,6 @@
 function editComment() {
 
     const commentReadOnly = document.getElementById('editComment')
-    // console.log('sdfdg');
     const textArea = document.createElement('textarea');
     const submitBtn = document.getElementById('editSubmit');
     

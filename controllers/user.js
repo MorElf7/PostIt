@@ -17,6 +17,10 @@ module.exports.signup = async (req, res, next) => {
         const {username, email, password} = req.body.user;
         const user = new User({email, username, bio: "",joinedAt: Date.now(), avatar: {}});
         const registeredUser = await User.register(user, password);
+        registeredUser.avatar.url = 'https://res.cloudinary.com/damrqx5dg/image/upload/v1651280572/PostIt/default_avatar_rm90mb.jpg';
+        registeredUser.avatar.filename = 'default_avatar_rm90mb';
+        registeredUser.follows.push(registeredUser._id);
+        await registeredUser.save();
         req.login(registeredUser, err => {
             if (err) return next(err);
             req.flash('success', 'Welcome to PostIt');
@@ -34,7 +38,7 @@ module.exports.signinform = (req, res) => {
 }
 
 module.exports.signin = (req, res) => {
-    const user = req.user
+    const user = req.user;
     req.flash('success', 'Signed In!');
     const redirectUrl = req.session.returnTo || `/${user._id}`;
     delete req.session.returnTo;
@@ -68,12 +72,17 @@ module.exports.edit = async (req, res) => {
 module.exports.update = async (req, res) => {
     const {userId} = req.params;
     const user = await User.findById(userId);
-    if (user.avatar.filename) {
+    if (user.avatar.filename !== 'default_avatar_rm90mb') {
         await cloudinary.uploader.destroy(user.avatar.filename);
     }
     await user.updateOne(req.body.user)
-    user.avatar.url = req.file.path;
-    user.avatar.filename = req.file.filename;
+    if (req.file) {
+        user.avatar.url = req.file.path;
+        user.avatar.filename = req.file.filename;
+    }
+    if (req.body.oldPassword && req.body.newPassword) {
+        user.changePassword(req.body.oldPassword, req.body.newPassword)
+    }
     await user.save();
     res.redirect(`/${userId}`);
 }

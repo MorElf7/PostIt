@@ -16,6 +16,19 @@
                         </div>
                     </div>
                     <div class="mb-3">
+                        <div class="">
+                            <label for="" class="form-label">Password</label> 
+                        </div>
+                        <label id="oldPassLabel" for="oldPassword" class="form-label" hidden>Old Password</label>
+                        <input class="form-control mb-2" type="password" id="oldPassword" name="oldPassword" value="" required disabled hidden>
+                        <label id="newPassLabel" for="newPassword" class="form-label" hidden>New Password</label>
+                        <input class="form-control mb-2" type="password" id="newPassword" name="newPassword" value="" required disabled hidden>
+                        <button type="button" id="changePasswordBtn" class="btn btn-sm btn-primary" onclick="changePassword()">Change Password</button>
+                        <div class="invalid-feedback">
+                            Please provide an password.
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input class="form-control" name="user[email]" id="email" type="email" value="<%= currentUser.email %>" required></input>
                         <div class="invalid-feedback">
@@ -24,7 +37,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="avatar" class="form-label">Avatar</label>
-                        <input class="form-control" type="file" id="avatar" name="user[avatar]">
+                        <input class="form-control" type="file" id="avatar" name="avatar">
                     </div>
                     
                     <div class="mb-3">

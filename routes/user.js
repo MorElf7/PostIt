@@ -45,7 +45,7 @@ router.get('/:userId/settings',
 router.put('/:userId', 
     middlewares.isSignIn, 
     middlewares.isUser,
-    upload.single('user[avatar]'),
+    upload.single('avatar'),
     middlewares.validateUser,
     wrapAsync(User.update))
 

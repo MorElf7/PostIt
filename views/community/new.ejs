@@ -17,11 +17,15 @@
                     </div>                    
                     <div class="mb-3">
                         <label for="logo" class="form-label">Logo</label>
-                        <input class="form-control" type="file" id="avatar" name="community[logo]">
+                        <input class="form-control" type="file" id="avatar" name="logo">
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
                         <textarea class="form-control" name="community[description]" id="description"rows="5"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="open">Open to everybody</label>
+                        <input type="checkbox" name="open" id="open" class="form-control" required>
                     </div>
                     <div>
                         <button type="submit" class="btn btn-success">Create</button>

@@ -39,7 +39,7 @@ const app = express();
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {
-    console.log("Serving on port 3000");
+    console.log(`Serving on port ${port}`);
 })
 
 app.engine('ejs', ejsMate);
@@ -72,9 +72,11 @@ app.use(helmet.contentSecurityPolicy({
     })
 );
 
+const secret = process.env.SECRET || 'developmentsecret'
+
 const store = MongoDBStore.create({
     mongoUrl: dbUrl,
-    secret: 'developmentsecret',
+    secret,
     touchAfter: 2 * 60 * 60
 })
 
@@ -85,7 +87,7 @@ store.on('error', function(e) {
 const sessionConfig = {
     store,
     name: 'session',
-    secret: 'developmentsecret',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {

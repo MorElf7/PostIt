@@ -40,7 +40,7 @@ module.exports.signinform = (req, res) => {
 module.exports.signin = (req, res) => {
     const user = req.user;
     req.flash('success', 'Signed In!');
-    const redirectUrl = req.session.returnTo || `/${user._id}`;
+    const redirectUrl = req.session.returnTo || '/';
     delete req.session.returnTo;
     res.redirect(redirectUrl);
 }

@@ -25,8 +25,8 @@ const ExpressError = require('./utils/ExpressError');
 const wrapAsync = require('./utils/wrapAsync');
 const Post = require('./models/post');
 
-// const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/PostIt';
-const dbUrl = 'mongodb://127.0.0.1:27017/PostIt';
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/PostIt';
+// const dbUrl = 'mongodb://127.0.0.1:27017/PostIt';
 mongoose.connect(dbUrl);
 
 const db = mongoose.connection;
@@ -71,7 +71,6 @@ app.use(helmet.contentSecurityPolicy({
         },
     })
 );
-// app.use(helmet({contentSecurityPolicy: false}));
 
 const store = MongoDBStore.create({
     mongoUrl: dbUrl,
@@ -112,7 +111,7 @@ app.use(function(req, res, next) {
     next();
 })
 
-
+//Home page
 app.get('/', wrapAsync(async (req, res) => {
     let posts = null;
     if (req.user) {
@@ -125,6 +124,7 @@ app.get('/', wrapAsync(async (req, res) => {
     res.render('home', {posts, pageTitle: 'Home'});
 }))
 
+//Recent Posts
 app.get('/posts', wrapAsync(async (req, res) => {
     let posts = await Post.find({}).populate('user');
     posts.sort((a, b) => {
@@ -133,6 +133,7 @@ app.get('/posts', wrapAsync(async (req, res) => {
     res.render('posts/index', {posts, pageTitle: 'All Posts'});
 }));
 
+//Search
 app.post('/search', wrapAsync(async (req, res) => {
     const {name} = req.body;
     User.createIndexes();

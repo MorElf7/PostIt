@@ -8,9 +8,10 @@
         <div class="navbar-nav">
           <a class="nav-link" aria-current="page" href="/">Home</a>
           <a class="nav-link" href="/posts">Recent Posts</a>
-          <a class="nav-link" href="/communities">Communities</a>
+          <!-- <a class="nav-link" href="/communities">Communities</a> -->
           <% if (currentUser) { %>
             <a class="nav-link" href="/<%= currentUser._id %>/posts/new">New Post</a>
+            <!-- <a class="nav-link" href="/communities/new">New Communities</a> -->
           <% } %>
         </div>
         <div class="navbar-nav ms-auto">

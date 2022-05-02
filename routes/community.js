@@ -20,13 +20,19 @@ router.get('/new',
 
 router.post('/',
     middlewares.isSignIn,
+    upload.single('logo'),
     wrapAsync(Community.create))
 
 //Edit
 router.get('/:communityId/settings',
-    wrapAsync(Community.edit))
+    middlewares.isSignIn,
+    middlewares.isAdmin,
+    upload.single('logo'),
+    wrapAsync(Community.settings))
 
 router.put('/:communityId',
+    middlewares.isSignIn,
+    middlewares.isAdmin,
     wrapAsync(Community.update))
 
 //Delete
@@ -36,5 +42,19 @@ router.delete('/:communityId',
 //Show
 router.get('/:communityId',
     wrapAsync(Community.show))
+
+
+//New Post
+router.get('/:communityId/posts/new',
+    middlewares.isSignIn,
+    middlewares.isMember,
+    wrapAsync(Community.newPost));
+
+router.post('/:communityId/posts',
+    middlewares.isSignIn,
+    middlewares.isMember,
+    wrapAsync(Community.createPost));
+
+
 
 module.exports = router

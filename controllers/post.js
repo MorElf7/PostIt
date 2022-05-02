@@ -101,7 +101,9 @@ module.exports.delete = async (req, res) => {
 
 module.exports.read = async (req, res) => {
     const {postId} = req.params;
-    const post = await Post.findById(postId).populate('user').populate({path: 'comments', populate: 'user'});
+    const post = await Post.findById(postId)
+                    .populate({path: 'user', select: ['username', '_id', 'avatar']})
+                    .populate({path: 'comments', populate: {path: 'user', select: ['username', '_id', 'avatar']}});
     if (!post) {
         req.flash('error', 'The post do not exist')
         return res.redirect(`/${userId}`)

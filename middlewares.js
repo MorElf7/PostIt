@@ -2,6 +2,7 @@ const ExpressError = require("./utils/ExpressError");
 const Post = require('./models/post');
 const User = require('./models/user');
 const Comment = require('./models/comment');
+const Community = require('./models/community');
 const {postSchema, userSchema, commentSchema} = require('./schemas');
 
 module.exports.isSignIn = (req, res, next) => {
@@ -29,6 +30,36 @@ module.exports.isCommentAuthor = async (req, res, next) => {
     if (!comment.user.equals(req.user._id)) {
         req.flash('error', 'You do not have permission')
         return res.redirect(`/${userId}/posts/${postId}`);
+    }
+    next();
+}
+
+module.exports.isMember = async (req, res, next) => {
+    const {communityId} = req.params;
+    const community = await Community.findById(communityId);
+    if (!community.members.find(e => e._id.equals(req.user._id))) {
+        req.flash('error', 'You do not have permission')
+        return res.redirect(`/communities/${communityId}`);
+    }
+    next();
+}
+
+module.exports.isMods = async (req, res, next) => {
+    const {communityId} = req.params;
+    const community = await Community.findById(communityId);
+    if (!community.moderators.find(e => e._id.equals(req.user._id))) {
+        req.flash('error', 'You do not have permission')
+        return res.redirect(`/communities/${communityId}`);
+    }
+    next();
+}
+
+module.exports.isAdmin = async (req, res, next) => {
+    const {communityId} = req.params;
+    const community = await Community.findById(communityId);
+    if (!community.admin.equals(req.user._id)) {
+        req.flash('error', 'You do not have permission')
+        return res.redirect(`/communities/${communityId}`);
     }
     next();
 }

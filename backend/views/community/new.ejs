@@ -1,0 +1,38 @@
+<% layout('layouts/boilerplate') %> 
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-6 offset-2">
+            <div class="">
+                <h3 class="mb-3">New Community</h3>
+            </div>
+            
+            <div>
+                <form action="/communities" method="POST" class="needs-validation" enctype="multipart/form-data" novalidate>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input class="form-control" type="text" id="name" name="community[name]" required>
+                        <div class="invalid-feedback">
+                            Please provide a name.
+                        </div>
+                    </div>                    
+                    <div class="mb-3">
+                        <label for="logo" class="form-label">Logo</label>
+                        <input class="form-control" type="file" id="avatar" name="logo">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" name="community[description]" id="description"rows="5"></textarea>
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <label class="form-check-label" for="open">Open to everybody</label>
+                        <input type="checkbox" name="open" id="open" class="form-check-input" required>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-success">Create</button>
+                        <a href="/communities"><button type="button" class="btn btn-secondary">Cancel</button></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+<% layout('layouts/boilerplate') %> 
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-6 offset-2">
+            <div class="">
+                <h3 class="mb-3">Account Settings</h3>
+            </div>
+            
+            <div>
+                <form action="/<%= currentUser._id %>?_method=PUT" method="POST" class="needs-validation mb-2" enctype="multipart/form-data" novalidate>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input class="form-control" type="text" id="username" name="user[username]" value="<%= currentUser.username %>" required>
+                        <div class="invalid-feedback">
+                            Please provide an username.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="">
+                            <label for="" class="form-label">Password</label> 
+                        </div>
+                        <label id="oldPassLabel" for="oldPassword" class="form-label" hidden>Old Password</label>
+                        <input class="form-control mb-2" type="password" id="oldPassword" name="oldPassword" value="" required disabled hidden>
+                        <label id="newPassLabel" for="newPassword" class="form-label" hidden>New Password</label>
+                        <input class="form-control mb-2" type="password" id="newPassword" name="newPassword" value="" required disabled hidden>
+                        <button type="button" id="changePasswordBtn" class="btn btn-sm btn-primary" onclick="changePassword()">Change Password</button>
+                        <div class="invalid-feedback">
+                            Please provide an password.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input class="form-control" name="user[email]" id="email" type="email" value="<%= currentUser.email %>" required></input>
+                        <div class="invalid-feedback">
+                            Please provide an email.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="avatar" class="form-label">Avatar</label>
+                        <input class="form-control" type="file" id="avatar" name="avatar">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="bio" class="form-label">Bio</label>
+                        <textarea class="form-control" name="user[bio]" id="bio" rows="5"><%= currentUser.bio %></textarea>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-success">Save</button>
+                        <a href="/<%= currentUser._id %>"><button type="button" class="btn btn-secondary">Cancel</button></a>
+                        
+                    </div>
+                </form>
+                <button class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#delete" type="button">Delete Account</button>
+        
+                <div class="modal fade" id="delete" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Do you want to delete your account?
+                            </div>
+                                <div class="modal-footer">
+                                <form action="/<%= currentUser._id %>?_method=DELETE" method="post">
+                                    <button class="btn btn-danger mx-3 card-link" type="submit">Yes</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

@@ -1,0 +1,35 @@
+<nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark mb-3">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">PostIt</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link" aria-current="page" href="/">Home</a>
+          <a class="nav-link" href="/posts" >Recent Posts</a>
+          <!-- <a class="nav-link" href="/communities">Communities</a> -->
+          <% if (currentUser) { %>
+            <a class="nav-link" href="/<%= currentUser._id %>/posts/new">New Post</a>
+            <!-- <a class="nav-link" href="/communities/new">New Communities</a> -->
+          <% } %>
+        </div>
+        
+        <div class="navbar-nav ms-auto">
+          <% if (!currentUser) { %>
+            <a href="/users/signup"><button class="btn btn-outline-primary me-2" type="button">Sign Up</button></a>
+            <a href="/users/signin"><button class="btn btn-outline-primary me-2" type="button">Sign In</button></a>
+          <% } else {%>
+            <a class="nav-link" href="/<%= currentUser._id %>"><%= currentUser.username %></a>
+            <a class="nav-link" href="/<%= currentUser._id %>/settings">Account settings</a>
+            <a class="nav-link" href="/users/signout">Sign Out</a>
+          <% } %> 
+          <form action="/search" method="POST" class="d-flex ">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="name">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </div>
+        
+      </div>
+    </div>
+</nav>

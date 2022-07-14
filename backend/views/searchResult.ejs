@@ -1,0 +1,60 @@
+<% layout('layouts/boilerplate') %> 
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="mb-3 mx-5"> 
+            <a id="backBtn" href="#"><button class="btn btn-lg btn-white"><i class="fa-solid fa-arrow-left"></i></button></a>
+            <h2>Search Results</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <ul class="list-group list-group-flush">
+            <% for (let element of list) { %>
+                <div class="list-group-item">
+                    <div class="card border mx-3 border-white">
+                    <% if (element.title) { %>
+                        <div class="card-body">
+                            <div class="card-title">
+                                <a href="/<%= element.user._id %>/posts/<%= element._id %>"><h4><%= element.title %></h4></a>
+                            </div>
+                            <div class="card-subtitle text-muted">
+                                <div class="row">
+                                    <div class="col text-start">
+                                        <a href="/<%= element.user._id %>">Posted by <%= element.user.username %></a>
+                                    </div>
+                                    <div class="col text-end ">
+                                        <%= element.updatedAt.toLocaleString() %>
+                                    </div>
+                                </div>  
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="col-6">
+                                <%= element.description %> 
+                            </div>
+                        </div>
+                    <% } else {%>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="card-title">
+                                    <% if (element.avatar) { %>
+                                        <img src="<%= element.avatar.smallAvatar %> " class="rounded-circle" alt="">
+                                    <% } %>
+                                    <a href="/<%= element._id %>"><h4><%= element.username %></h4></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="col-6">
+                                <%= element.bio %> 
+                            </div>
+                        </div>
+                    <% } %>     
+                    </div>
+                </div>
+            <% } %> 
+            </ul>
+        </div>
+    </div>
+</div>

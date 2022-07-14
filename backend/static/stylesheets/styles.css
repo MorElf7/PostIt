@@ -1,0 +1,22 @@
+a {
+    text-decoration: none;
+    color:black;
+}
+
+a:hover {
+    text-decoration: underline;
+    color:black;
+}
+
+textarea {
+    resize: none;
+}
+
+#more {
+    display: none;
+}
+
+#editCommentTextArea {
+    border: nones;
+    outline: none;
+}

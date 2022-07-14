@@ -1,0 +1,76 @@
+<% layout('layouts/boilerplate') %> 
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-6 offset-2">
+            <div class="card bg-white border-white text-dark mb-3">
+                <div class="card-body">
+                    <div class="card-link mb-3 mx-5"> 
+                        <a id="backBtn" href="/"><button class="btn btn-white"><i class="fa-solid fa-arrow-left"></i></button></a>
+                    </div>
+                    <div class="card-title mt-3 mb-3 mx-5">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <% if (user.avatar) { %>
+                                    <img src="<%= user.avatar.thumbnail %> " class="rounded-circle mx-auto" alt="">
+                                <% } %>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-9">
+                                <h3> <%= user.username %> </h3>
+                            </div>
+                            <div class="col-auto justify-content-end">
+                                <% if (currentUser && !currentUser._id.equals(user._id)) { %>
+                                    <% if (!currentUser.follows.includes(user._id)) { %>
+                                        <form action="/<%= currentUser._id %>?_method=PATCH" method="POST">
+                                            <input type="text" name="follow" id="" value="<%= user._id %>"  hidden>
+                                            <button class="btn btn-outline-primary" type="submit">Follow</button>
+                                        </form>
+                                    <% } else {%>
+                                        <form action="/<%= currentUser._id %>?_method=PATCH" method="POST">
+                                            <input type="text" name="unfollow" id="" value="<%= user._id %>"  hidden>
+                                            <button class="btn btn-outline-secondary" type="submit">Unfollow</button>
+                                        </form>
+                                    <% } %> 
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-subtitle mb-3 mx-5">
+                        <h5>Bio</h5>
+                        <% if (user.bio) { %>
+                            <div> <%= user.bio %> </div>
+                        <% } %>
+                    </div>
+                </div>
+                
+                <div class="mb-3 mx-5">
+                    <hr>
+                    <h5>Posts</h5>
+                    <ul class="list-group list-group-flush">
+                        <% for (let post of user.posts) {%>
+                        <li class="list-group-item bg-white">
+                            <div class="card border-white w-100">
+                                <div class="card border-white text-start w-100" >
+                                    <div class="card-body">
+                                        <div class="card-title">
+                                            <h3><a href="/<%= post.user %>/posts/<%= post._id %>" ><%= post.title %></a></h3>
+                                        </div>
+                                        <div class="card-subtitle text-muted">
+                                            <a href="/<%= user._id %>">Posted by <%= user.username %></a>
+                                        </div>
+                                        <div class="card-body" ><%= post.description %></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <%}%>  
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

@@ -1,0 +1,40 @@
+<% layout('layouts/boilerplate') %> 
+<div class="container">
+    <div class="col-md">
+        <div class="mb-3 mx-3"> 
+            <a id="backBtn" href="/"><button class="btn btn-lg btn-white"><i class="fa-solid fa-arrow-left"></i></button></a>
+            <h3>Communities</h3>
+        </div>
+        <ul class="list-group list-group-flush">
+        <% for (let community of communities) {%> 
+            <div class="list-group-item">
+                <div class="card border mx-3 border-white">
+                    <div class="card-body">                        
+                        <div class="card-title">
+                            <div class="row">
+                                <div class="col text-start">
+                                    <% if (community.logo) { %>
+                                        <img src="<%= community.logo.smallAvatar %> " class="rounded-circle" alt="">
+                                    <% } %>
+                                    <a href="/communities/<%= community._id %>"><h4><%= community.name %></h4></a>
+                                </div>
+                                <div class="col text-end ">
+                                    Since <%= community.createdAt.getMonth() + '/' + community.createdAt.getDate() + '/' +community.createdAt.getFullYear() %>
+                                </div>                                
+                            </div>
+                            
+                        </div>
+                        <div class="card-subtitle text-muted">
+                            <div class="row">
+                                <div class="col text-start">
+                                    <%= community.description %> 
+                                </div>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %> 
+        </ul> 
+    </div>
+</div>

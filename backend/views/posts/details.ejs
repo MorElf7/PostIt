@@ -1,0 +1,88 @@
+<% layout('layouts/boilerplate') %> 
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-8 offset-2">
+            <div class="card bg-white border-white text-dark">
+                <div class="mb-3 mx-5"> 
+                    <a id="backBtn" href="/posts"><button class="btn btn-lg btn-white"><i class="fa-solid fa-arrow-left"></i></button></a>
+                </div>
+                <div class="card-body mb-3 mx-5">
+                    
+                    <div class="card-title">
+                        <h2><%= post.title %> </h2>
+                    </div>
+                    <div class="card-subtitle text-muted">
+                        <div>Posted by <%= post.user.username %></div>
+                        <div><%= post.updatedAt.toLocaleString() %></div>
+                    </div>
+                </div>
+                <% if (post.image) { %>
+                    <div class="mb-3">
+                        <img class="card-img px-5" src="<%= post.image.thumbnail %>"  alt="">
+                    </div>
+                <% } %>
+                
+                <div class="card-body mb-3 mx-5">
+                    <div class="card-text">
+                        <%= post.description %>
+                    </div>
+                </div>
+                
+                <div class="card-body mb-3 mx-5">
+                    <form class="card-link" action="/<%= post.user._id %>/posts/<%= post._id %>?_method=DELETE" method="POST">
+                        <% if (currentUser && post.user.equals(currentUser._id)) { %>
+                            <a href="/<%= post.user._id %>/posts/<%= post._id %>/edit"><button type="button" class="btn btn-primary mb-3">Edit</button></a>
+                            <button type="submit" class="btn btn-primary mb-3">Delete</button>
+                        <% } %>
+                        <!-- <a href="#"><button type="button" class="btn btn-secondary mb-3" onclick="history.back()">Back</button></button></a> -->
+                    </form>
+                </div>
+
+                <div class="card-body">    
+                    <form class="row mb-3 mx-2" action="/<%= post.user._id %>/posts/<%= post._id %>/comments" method="post">
+                        <div class="col-9">
+                            <textarea resize="none" class="form-control" name="comment[content]" id="content" rows="2" placeholder="Leave your comemnt here"></textarea>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-outline-success" type="submit">Comment</button>
+                        </div>
+                    </form>
+                    <ul class="list-group list-group-flush">
+                        <% for(let comment of post.comments) { %>
+                            <div class="list-group-item bg-white">
+                                <div class="row mx-1">
+                                    <div class="col-md-7">
+                                        <h5 class=""><a href="/<%= comment.user._id %> "><%= comment.user.username %></a></h5>
+                                        <form class="mb-2" action="/<%= post.user._id %>/posts/<%= post._id %>/comments/<%= comment._id %>?_method=PUT" method="post">
+                                            <div class="row">
+                                                <div id="editComment" class="col-md-8 text-start"><%= comment.content %></div>
+                                                <div class="col-auto justify-content-end">
+                                                    <button id="editSubmit" type="submit" class="btn btn-outline-success mx-auto" hidden disabled>Edit</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-auto text-muted mx-auto text-end">
+                                        <%= comment.updatedAt.toLocaleString() %> 
+                                        <% if (currentUser._id.equals(comment.user._id)) { %>
+                                        <button id="menu" class="btn" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+                                        <ul class="dropdown-menu" aria-labelledby="menu">
+                                            <form class="" action="/<%= post.user._id %>/posts/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE" method="post">
+                                                <li class="dropdown-item"><a onclick="editComment()" href="#">Edit</a></li>
+                                                <li class=""><button class="dropdown-item" type="submit">Delete</button></li>
+                                            </form>
+                                        </ul>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+                    </ul>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+    
+</div>

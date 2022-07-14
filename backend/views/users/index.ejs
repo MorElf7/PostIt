@@ -1,0 +1,24 @@
+<% layout('layouts/boilerplate') %> 
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-6 offset-2">
+            <div class="mb-3 offset-5">
+                <h1>All Users</h1>
+            </div>
+            <div class="">
+                <ul>
+                <% for (let user of users) {%>
+                    <div class="card border-white mb-3 w-100">
+                        <a class="btn border-info btn-light" href="/<%= user.id %>">
+                            <div class="card-body">
+                                <h4 class="card-title"><%= user.username %></h4>
+                                <div class="card-text"><%= user.bio %></div>
+                            </div>
+                        </a>    
+                    </div>
+                <%}%>  
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

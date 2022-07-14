@@ -1,0 +1,59 @@
+<% layout('layouts/boilerplate') %> 
+
+<% if (currentUser) {%>
+        
+<div class="container">
+    <div class="col-md-6 offset-3">
+        <ul class="list-group list-group-flush">
+        <% for (let post of posts) {%> 
+            <div class="list-group-item">
+                <div class="card border mx-3 border-white">
+                    <div class="card-body">                        
+                        <div class="card-title">
+                            <a href="/<%= post.user._id %>/posts/<%= post._id %>"><h4><%= post.title %></h4></a>
+                        </div>
+                        <div class="card-subtitle text-muted">
+                            <div class="row">
+                                <div class="col text-start">
+                                    <a href="/<%= post.user._id %>">Posted by <%= post.user.username %></a>
+                                </div>
+                                <div class="col text-end ">
+                                    <%= post.updatedAt.toLocaleString() %>
+                                </div>
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="card-body">
+                            <%= post.description %> 
+                    </div>
+                </div>
+            </div>
+        <% } %> 
+        </ul> 
+    </div>
+</div>
+
+<% } else {%> 
+<div class="container my-auto">
+    <div class="row justify-content-center mb-5">
+        <div class="col-6 offset-3">
+            <h1>Join PostIt today</h1>
+        </div>
+    </div>
+    <div class="row align-items-center mb-5">
+        <div class="col-md-4 offset-3">
+            <div class="card card-body bg-white border-white text-dark">
+                <h2>Are you a user?</h2>
+            </div>
+
+            <div class="card card-body bg-white border-white text-dark">
+                <h2>If not</h2>
+            </div>
+        </div>
+        <div class="d-grid gap-3 col-auto">
+            <a class="btn btn-lg btn-primary me-2" href="/users/signin">Sign In</a>
+            <a class="btn btn-lg btn-primary me-2" href="/users/signup">Sign Up</a>
+        </div>
+    </div>
+</div>
+<% } %> 

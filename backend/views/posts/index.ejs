@@ -1,0 +1,39 @@
+<% layout('layouts/boilerplate') %> 
+<div class="container">
+    <div class="col-md">
+        <div class="mb-3 mx-5"> 
+            <a id="backBtn" href="/"><button class="btn btn-lg btn-white"><i class="fa-solid fa-arrow-left"></i></button></a>
+        </div>
+        <ul class="list-group list-group-flush">
+        <% for (let post of posts) {%> 
+            <div class="list-group-item">
+                <div class="card border mx-3 border-white">
+                    <div class="card-body">                        
+                        <div class="card-title">
+                            <a href="/<%= post.user._id %>/posts/<%= post._id %>"><h4><%= post.title %></h4></a>
+                        </div>
+                        <div class="card-subtitle text-muted">
+                            <div class="row">
+                                <div class="col text-start">
+                                    <a href="/<%= post.user._id %>">Posted by <%= post.user.username %></a>
+                                </div>
+                                <div class="col text-end ">
+                                    <%= post.updatedAt.toLocaleString() %>
+                                </div>
+                            </div>  
+                        </div>
+                    </div>
+                    <% if (post.image) { %>
+                        <div class="mb-3">
+                            <img class="card-img px-5" src="<%= post.image.thumbnail %>"  alt="">
+                        </div>
+                    <% } %>
+                    <div class="card-body">
+                            <%= post.description %> 
+                    </div>
+                </div>
+            </div>
+        <% } %> 
+        </ul> 
+    </div>
+</div>

@@ -1,0 +1,69 @@
+<% layout('layouts/boilerplate') %> 
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-6 offset-2">
+            <div class="card bg-white border-white text-dark mb-3">
+                <div class="card-link mb-3 mx-5"> 
+                    <a id="backBtn" href="/"><button class="btn btn-white"><i class="fa-solid fa-arrow-left"></i></button></a>
+                </div>
+                <div class="card-body">
+                    <% if (community.logo) { %>
+                        <div class="mb-3">
+                            <img src="<%= community.logo.thumbnail %> " class="card-img px-5" alt="">
+                        </div>
+                    <% } %>
+                    <div class="card-title mt-3 mb-3 mx-5">
+                        <div class="row">
+                            <div class="col-md text-start">
+                                <h3> <%= community.name %> </h3>
+                            </div>
+                            <div class="col-md text-end">
+                                <% if (currentUser && (community.moderators.find(e => e._id.equals(currentUser._id)) || community.admin.equals(currentUser._id))) { %>
+                                    <a href="/communities/<%= community._id %>/settings"><button class="btn btn-white"><i class="fa-solid fa-gear"></i></button></a>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-text mb-3 mx-5">
+                        <% if (community.description) { %>
+                            <div> <%= community.description %> </div>
+                        <% } %>
+                    </div>
+                </div>
+                
+                <div class="card-link mb-3 mx-5"> 
+                    <% if (currentUser && community.members.find(e => e._id.equals(currentUser._id))) { %>
+                        <a href="/communities/<%= community._id %>/posts/new"><button type="button" class="btn btn-primary">New Post</button></a>
+                    <% } %>
+                    <a href="/communities"><button type="button" class="btn btn-secondary">Back</button></a>
+                </div>
+
+                <div class="mb-3">
+                    <hr>
+                    <h5>Posts</h5>
+                    <ul class="list-group list-group-flush">
+                    <% for (let post of community.posts) %> 
+                        <li class="list-group-item bg-white">
+                            <div class="card border-white w-100">
+                                <div class="card border-white text-start w-100" >
+                                    <div class="card-body">
+                                        <div class="card-title">
+                                            <h3><a href="/communities/<%= community._id %>/posts/<%= post._id %>" ><%= post.title %></a></h3>
+                                        </div>
+                                        <div class="card-subtitle text-muted">
+                                            <a href="/<%= user._id %>">Posted by <%= user.username %></a>
+                                        </div>
+                                        <div class="card-body" ><%= post.description %></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    <% } %> 
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+</div>
